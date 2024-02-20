@@ -39,9 +39,9 @@ func main() {
 	r := gin.Default()
 	r.GET("/user", func(ctx *gin.Context) {
 		auth := ctx.GetHeader("Authorization")
-		if(auth == "") {
+		if auth == "" {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
-				"error" : "Please provide an auhorization token",
+				"error": "Please provide an auhorization token",
 			})
 			return
 		}
@@ -73,7 +73,7 @@ func main() {
 			return
 		}
 
-		res, err := client.AuthenticateUser(ctx, &pb.AuthenticationRequest{
+		res, err := client.SaveUser(ctx, &pb.SaveUserRequest{
 			Username: user.Username,
 			Password: user.Password,
 		})
@@ -89,9 +89,9 @@ func main() {
 	})
 	r.PUT("/user", func(ctx *gin.Context) {
 		auth := ctx.GetHeader("Authorization")
-		if(auth == "") {
+		if auth == "" {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
-				"error" : "Please provide an auhorization token",
+				"error": "Please provide an auhorization token",
 			})
 			return
 		}
@@ -124,9 +124,9 @@ func main() {
 	})
 	r.PUT("/user/update", func(ctx *gin.Context) {
 		auth := ctx.GetHeader("Authorization")
-		if(auth == "") {
+		if auth == "" {
 			ctx.JSON(http.StatusUnauthorized, gin.H{
-				"error" : "Please provide an auhorization token",
+				"error": "Please provide an auhorization token",
 			})
 			return
 		}

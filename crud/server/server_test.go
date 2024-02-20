@@ -23,7 +23,7 @@ func TestUserCreated_ExpextSuccess(t *testing.T) {
 		WithArgs("testuser", "testpassword", sqlmock.AnyArg()).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
-	resp, err := server.AuthenticateUser(context.Background(), &pb.AuthenticationRequest{
+	resp, err := server.SaveUser(context.Background(), &pb.SaveUserRequest{
 		Username: "testuser",
 		Password: "testpassword",
 	})

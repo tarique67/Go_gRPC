@@ -27,13 +27,13 @@ type userServiceServer struct {
 	pb.UnimplementedUserServiceServer
 }
 
-func (s *userServiceServer) AuthenticateUser(ctx context.Context, req *pb.AuthenticationRequest) (*pb.AuthenticationResponse, error) {
+func (s *userServiceServer) SaveUser(ctx context.Context, req *pb.SaveUserRequest) (*pb.SaveUserResponse, error) {
 	token := uuid.New().String()
 	_, err := s.db.Exec("INSERT INTO users (username, password, token) VALUES ($1, $2, $3)", req.Username, req.Password, token)
 	if err != nil {
 		return nil, err
 	}
-	return &pb.AuthenticationResponse{Token: token}, nil
+	return &pb.SaveUserResponse{Token: token}, nil
 }
 func (s *userServiceServer) GetUserDetails(ctx context.Context, req *pb.UserDetailsRequest) (*pb.UserDetailsResponse, error) {
 	var name string

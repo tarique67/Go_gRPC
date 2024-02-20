@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserServiceClient interface {
-	AuthenticateUser(ctx context.Context, in *AuthenticationRequest, opts ...grpc.CallOption) (*AuthenticationResponse, error)
+	SaveUser(ctx context.Context, in *SaveUserRequest, opts ...grpc.CallOption) (*SaveUserResponse, error)
 	SaveUserDetails(ctx context.Context, in *SaveUserDetailRequest, opts ...grpc.CallOption) (*SavedUserDetailResponse, error)
 	GetUserDetails(ctx context.Context, in *UserDetailsRequest, opts ...grpc.CallOption) (*UserDetailsResponse, error)
 	UpdateUserName(ctx context.Context, in *UpdateUserNameRequest, opts ...grpc.CallOption) (*UpdateUserNameResponse, error)
@@ -36,9 +36,9 @@ func NewUserServiceClient(cc grpc.ClientConnInterface) UserServiceClient {
 	return &userServiceClient{cc}
 }
 
-func (c *userServiceClient) AuthenticateUser(ctx context.Context, in *AuthenticationRequest, opts ...grpc.CallOption) (*AuthenticationResponse, error) {
-	out := new(AuthenticationResponse)
-	err := c.cc.Invoke(ctx, "/proto.UserService/AuthenticateUser", in, out, opts...)
+func (c *userServiceClient) SaveUser(ctx context.Context, in *SaveUserRequest, opts ...grpc.CallOption) (*SaveUserResponse, error) {
+	out := new(SaveUserResponse)
+	err := c.cc.Invoke(ctx, "/proto.UserService/SaveUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (c *userServiceClient) UpdateUserName(ctx context.Context, in *UpdateUserNa
 // All implementations must embed UnimplementedUserServiceServer
 // for forward compatibility
 type UserServiceServer interface {
-	AuthenticateUser(context.Context, *AuthenticationRequest) (*AuthenticationResponse, error)
+	SaveUser(context.Context, *SaveUserRequest) (*SaveUserResponse, error)
 	SaveUserDetails(context.Context, *SaveUserDetailRequest) (*SavedUserDetailResponse, error)
 	GetUserDetails(context.Context, *UserDetailsRequest) (*UserDetailsResponse, error)
 	UpdateUserName(context.Context, *UpdateUserNameRequest) (*UpdateUserNameResponse, error)
@@ -87,8 +87,8 @@ type UserServiceServer interface {
 type UnimplementedUserServiceServer struct {
 }
 
-func (UnimplementedUserServiceServer) AuthenticateUser(context.Context, *AuthenticationRequest) (*AuthenticationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AuthenticateUser not implemented")
+func (UnimplementedUserServiceServer) SaveUser(context.Context, *SaveUserRequest) (*SaveUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveUser not implemented")
 }
 func (UnimplementedUserServiceServer) SaveUserDetails(context.Context, *SaveUserDetailRequest) (*SavedUserDetailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveUserDetails not implemented")
@@ -112,20 +112,20 @@ func RegisterUserServiceServer(s grpc.ServiceRegistrar, srv UserServiceServer) {
 	s.RegisterService(&UserService_ServiceDesc, srv)
 }
 
-func _UserService_AuthenticateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AuthenticationRequest)
+func _UserService_SaveUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveUserRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServiceServer).AuthenticateUser(ctx, in)
+		return srv.(UserServiceServer).SaveUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/proto.UserService/AuthenticateUser",
+		FullMethod: "/proto.UserService/SaveUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServiceServer).AuthenticateUser(ctx, req.(*AuthenticationRequest))
+		return srv.(UserServiceServer).SaveUser(ctx, req.(*SaveUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -192,8 +192,8 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AuthenticateUser",
-			Handler:    _UserService_AuthenticateUser_Handler,
+			MethodName: "SaveUser",
+			Handler:    _UserService_SaveUser_Handler,
 		},
 		{
 			MethodName: "SaveUserDetails",
